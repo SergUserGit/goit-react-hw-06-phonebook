@@ -4,7 +4,12 @@ import Filter from './Filter/Filter';
 import React, { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact, deleteContact } from 'redux/slice';
+import {
+  addContacts,
+  deleteContacts,
+  updateFilter,
+  filterContacts,
+} from 'redux/slice';
 
 const App = () => {
   // const [contacts, setContacts] = useState(
@@ -19,6 +24,7 @@ const App = () => {
   // const [contactsFilter, setContactsFilter] = useState([]);
   const dispatch = useDispatch();
   const contacts = useSelector(state => state.contacts);
+  //const filter = useSelector(state => state.filter);
 
   const formSubmitHandler = data => {
     //  setContactsFilter(state => []);
@@ -30,14 +36,18 @@ const App = () => {
       return;
     }
     const newObj = { id: nanoid(), name: data.name, number: data.number };
-    dispatch(addContact(newObj));
+    dispatch(addContacts(newObj));
 
     //  setContacts(state => [...state, newObj]);
   };
 
   const handleFilterChange = e => {
     //    setContactsFilter(state => []);
-    //   const { value: filterContact } = e.target;
+    const { value: filterContact } = e.target;
+
+    dispatch(updateFilter(filterContact.toUpperCase()));
+
+    dispatch(filterContacts(filterContact.toUpperCase()));
     //   const filterArray = contacts.filter(contact =>
     //    contact.name.toUpperCase().includes(filterContact.toUpperCase())
     //  );
@@ -49,7 +59,7 @@ const App = () => {
   };
 
   const handleDeleteContact = el => {
-    dispatch(deleteContact(el.target.dataset.id));
+    dispatch(deleteContacts(el.target.dataset.id));
     //   setContactsFilter(state => []);
     //   const findElement = contacts.find(
     //     findEl => findEl.id === el.target.dataset.id
