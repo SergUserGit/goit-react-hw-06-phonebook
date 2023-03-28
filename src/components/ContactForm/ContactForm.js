@@ -7,24 +7,24 @@ const ContactForm = ({ onSubmit }) => {
   const [number, setNumber] = useState('');
 
   const handleChange = e => {
-    //   const { name, value } = e.target;
-    //   if (name === 'name') {
-    //    setName(state => value);
-    //  } else {
-    //    setNumber(state => value);
-    //  }
+    const { name, value } = e.target;
+    if (name === 'name') {
+      setName(state => value);
+    } else {
+      setNumber(state => value);
+    }
   };
 
   const handleSubmit = evt => {
-    //  evt.preventDefault();
-    //  onSubmit({ name, number });
-    //   reset();
+    evt.preventDefault();
+    onSubmit({ name, number });
+    reset();
   };
 
-  // const reset = () => {
-  //   setName(state => '');
-  //   setNumber(state => '');
-  // };
+  const reset = () => {
+    setName(state => '');
+    setNumber(state => '');
+  };
 
   return (
     <form className={css.formContact} onSubmit={handleSubmit}>

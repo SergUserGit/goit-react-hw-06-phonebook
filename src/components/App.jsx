@@ -3,6 +3,8 @@ import ContactList from './ContactList/ContactList';
 import Filter from './Filter/Filter';
 import React, { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact, deleteContact } from 'redux/slice';
 
 const App = () => {
   // const [contacts, setContacts] = useState(
@@ -15,47 +17,52 @@ const App = () => {
   // );
 
   // const [contactsFilter, setContactsFilter] = useState([]);
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts);
 
-  //  const formSubmitHandler = data => {
-  //  setContactsFilter(state => []);
-  //  const findElem = contacts.filter(
-  //    contact => contact.name.toUpperCase() === data.name.toUpperCase()
-  //   );
-  //   if (findElem.length > 0) {
-  //    alert(data.name + ' is already in contacts.');
-  //    return;
-  //  }
-  //  const newObj = { id: nanoid(), name: data.name, number: data.number };
-  //  setContacts(state => [...state, newObj]);
-  //};
+  const formSubmitHandler = data => {
+    //  setContactsFilter(state => []);
+    const findElem = contacts.filter(
+      contact => contact.name.toUpperCase() === data.name.toUpperCase()
+    );
+    if (findElem.length > 0) {
+      alert(data.name + ' is already in contacts.');
+      return;
+    }
+    const newObj = { id: nanoid(), name: data.name, number: data.number };
+    dispatch(addContact(newObj));
 
-  // const handleFilterChange = e => {
-  //    setContactsFilter(state => []);
-  //   const { value: filterContact } = e.target;
-  //   const filterArray = contacts.filter(contact =>
-  //    contact.name.toUpperCase().includes(filterContact.toUpperCase())
-  //  );
-  //  if (filterArray.length > 0) {
-  //    for (const i of filterArray) {
-  //      setContactsFilter(state => [...state, i]);
-  //    }
-  //  }
-  // };
+    //  setContacts(state => [...state, newObj]);
+  };
 
-  // const handleDeleteContact = el => {
-  //   setContactsFilter(state => []);
-  //   const findElement = contacts.find(
-  //     findEl => findEl.id === el.target.dataset.id
-  //  );
-  //  if (findElement !== undefined) {
-  //     const indexElement = contacts.indexOf(findElement);
-  //    if (indexElement !== -1) {
-  //      setContacts(state =>
-  //       state.filter(elem => elem.id !== el.target.dataset.id)
-  //     );
-  //    }
-  //   }
-  // };
+  const handleFilterChange = e => {
+    //    setContactsFilter(state => []);
+    //   const { value: filterContact } = e.target;
+    //   const filterArray = contacts.filter(contact =>
+    //    contact.name.toUpperCase().includes(filterContact.toUpperCase())
+    //  );
+    //  if (filterArray.length > 0) {
+    //    for (const i of filterArray) {
+    //      setContactsFilter(state => [...state, i]);
+    //    }
+    //  }
+  };
+
+  const handleDeleteContact = el => {
+    dispatch(deleteContact(el.target.dataset.id));
+    //   setContactsFilter(state => []);
+    //   const findElement = contacts.find(
+    //     findEl => findEl.id === el.target.dataset.id
+    //  );
+    //  if (findElement !== undefined) {
+    //     const indexElement = contacts.indexOf(findElement);
+    //    if (indexElement !== -1) {
+    //      setContacts(state =>
+    //       state.filter(elem => elem.id !== el.target.dataset.id)
+    //     );
+    //    }
+    //   }
+  };
 
   // useEffect(() => {
   //    localStorage.setItem('contacts', JSON.stringify(contacts));
@@ -71,13 +78,21 @@ const App = () => {
         fontSize: 20,
         color: '#010101',
       }}
-    ></div>
+    >
+      <h1>Phonebook</h1>
+      <ContactForm onSubmit={formSubmitHandler} />
+      <h2>Contacts</h2>
+      <Filter handleFilterChange={handleFilterChange} />
+      <ContactList
+        handleDeleteContact={handleDeleteContact}
+        contacts={contacts}
+      />
+    </div>
   );
 };
 
 export default App;
-// <h1>Phonebook</h1>
-//   <ContactForm onSubmit={formSubmitHandler} />
+
 //   <h2>Contacts</h2>
 //   <Filter handleFilterChange={handleFilterChange} />
 //   <ContactList
