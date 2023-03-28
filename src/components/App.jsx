@@ -16,6 +16,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   const contacts = useSelector(state => state.contacts);
+  //const contacts = Array.isArray(mycontacts) ? mycontacts : [];
   const filterContactArray = useSelector(state => state.contactsFilter);
 
   const formSubmitHandler = data => {
