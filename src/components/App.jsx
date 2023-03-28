@@ -9,25 +9,18 @@ import {
   deleteContacts,
   updateFilter,
   filterContacts,
+  resetFilterContacts,
 } from 'redux/slice';
 
 const App = () => {
-  // const [contacts, setContacts] = useState(
-  //   JSON.parse(localStorage.getItem('contacts')) ?? [
-  //     { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-  //     { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-  //     { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-  //    { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-  //  ]
-  // );
-
-  // const [contactsFilter, setContactsFilter] = useState([]);
   const dispatch = useDispatch();
+
   const contacts = useSelector(state => state.contacts);
-  //const filter = useSelector(state => state.filter);
+  const filterContactArray = useSelector(state => state.contactsFilter);
 
   const formSubmitHandler = data => {
-    //  setContactsFilter(state => []);
+    dispatch(resetFilterContacts());
+
     const findElem = contacts.filter(
       contact => contact.name.toUpperCase() === data.name.toUpperCase()
     );
@@ -37,46 +30,21 @@ const App = () => {
     }
     const newObj = { id: nanoid(), name: data.name, number: data.number };
     dispatch(addContacts(newObj));
-
-    //  setContacts(state => [...state, newObj]);
   };
 
   const handleFilterChange = e => {
-    //    setContactsFilter(state => []);
+    dispatch(resetFilterContacts());
     const { value: filterContact } = e.target;
-
     dispatch(updateFilter(filterContact.toUpperCase()));
-
-    dispatch(filterContacts(filterContact.toUpperCase()));
-    //   const filterArray = contacts.filter(contact =>
-    //    contact.name.toUpperCase().includes(filterContact.toUpperCase())
-    //  );
-    //  if (filterArray.length > 0) {
-    //    for (const i of filterArray) {
-    //      setContactsFilter(state => [...state, i]);
-    //    }
-    //  }
+    dispatch(
+      filterContacts({ contacts, filterContact: filterContact.toUpperCase() })
+    );
   };
 
   const handleDeleteContact = el => {
+    dispatch(resetFilterContacts());
     dispatch(deleteContacts(el.target.dataset.id));
-    //   setContactsFilter(state => []);
-    //   const findElement = contacts.find(
-    //     findEl => findEl.id === el.target.dataset.id
-    //  );
-    //  if (findElement !== undefined) {
-    //     const indexElement = contacts.indexOf(findElement);
-    //    if (indexElement !== -1) {
-    //      setContacts(state =>
-    //       state.filter(elem => elem.id !== el.target.dataset.id)
-    //     );
-    //    }
-    //   }
   };
-
-  // useEffect(() => {
-  //    localStorage.setItem('contacts', JSON.stringify(contacts));
-  //  }, [contacts]);
 
   return (
     <div
@@ -95,17 +63,10 @@ const App = () => {
       <Filter handleFilterChange={handleFilterChange} />
       <ContactList
         handleDeleteContact={handleDeleteContact}
-        contacts={contacts}
+        contacts={filterContactArray.length > 0 ? filterContactArray : contacts}
       />
     </div>
   );
 };
 
 export default App;
-
-//   <h2>Contacts</h2>
-//   <Filter handleFilterChange={handleFilterChange} />
-//   <ContactList
-//     handleDeleteContact={handleDeleteContact}
-//     contacts={contactsFilter.length > 0 ? contactsFilter : contacts}
-//   />

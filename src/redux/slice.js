@@ -16,19 +16,6 @@ const contactsSlice = createSlice({
         }
       }
     },
-    filterContacts(state, action) {
-      const contactsFilter = [];
-      const filterArray = state.filter(contact =>
-        contact.name.toUpperCase().includes(action)
-      );
-      if (filterArray.length > 0) {
-        for (const i of filterArray) {
-          contactsFilter.push(i);
-        }
-        return contactsFilter;
-      }
-      return state;
-    },
   },
 });
 
@@ -42,9 +29,33 @@ const filterSlice = createSlice({
   },
 });
 
-export const { addContacts, deleteContacts, filterContacts } =
-  contactsSlice.actions;
+const contactsFilterSlice = createSlice({
+  name: 'contactsFilter',
+  initialState: [],
+  reducers: {
+    filterContacts(state, action) {
+      const filterArray = action.payload.contacts.filter(contact =>
+        contact.name.toUpperCase().includes(action.payload.filterContact)
+      );
+      if (filterArray.length > 0) {
+        for (const i of filterArray) {
+          state.push(i);
+        }
+      }
+    },
+
+    resetFilterContacts(state, action) {
+      return [];
+    },
+  },
+});
+
+export const { addContacts, deleteContacts } = contactsSlice.actions;
 export const contactsReducer = contactsSlice.reducer;
 
 export const { updateFilter } = filterSlice.actions;
 export const filterReducer = filterSlice.reducer;
+
+export const { filterContacts, resetFilterContacts } =
+  contactsFilterSlice.actions;
+export const filterContactsReducer = contactsFilterSlice.reducer;
