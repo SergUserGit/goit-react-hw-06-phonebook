@@ -7,20 +7,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   addContacts,
   deleteContacts,
-  updateFilter,
-  filterContacts,
-  resetFilterContacts,
+  // updateFilter,
+  // filterContacts,
+  // resetFilterContacts,
 } from 'redux/slice';
 
 const App = () => {
   const dispatch = useDispatch();
 
-  const contacts = useSelector(state => state.contacts);
+  const contacts = useSelector(state => state.phonebook.contacts);
+
+  //console.log(contacts);
   //const contacts = Array.isArray(mycontacts) ? mycontacts : [];
-  const filterContactArray = useSelector(state => state.contactsFilter);
+  // const filterContactArray = useSelector(state => state.contactsFilter);
 
   const formSubmitHandler = data => {
-    dispatch(resetFilterContacts());
+    //   dispatch(resetFilterContacts());
 
     const findElem = contacts.filter(
       contact => contact.name.toUpperCase() === data.name.toUpperCase()
@@ -34,17 +36,18 @@ const App = () => {
   };
 
   const handleFilterChange = e => {
-    dispatch(resetFilterContacts());
-    const { value: filterContact } = e.target;
-    dispatch(updateFilter(filterContact.toUpperCase()));
-    dispatch(
-      filterContacts({ contacts, filterContact: filterContact.toUpperCase() })
-    );
+    // dispatch(resetFilterContacts());
+    // const { value: filterContact } = e.target;
+    //  dispatch(updateFilter(filterContact.toUpperCase()));
+    //  dispatch(
+    //    filterContacts({ contacts, filterContact: filterContact.toUpperCase() })
+    //  );
   };
 
   const handleDeleteContact = el => {
-    dispatch(resetFilterContacts());
+    //  dispatch(resetFilterContacts());
     dispatch(deleteContacts(el.target.dataset.id));
+    //   contacts = useSelector(state => state.phonebook.contacts);
   };
 
   return (
@@ -64,7 +67,7 @@ const App = () => {
       <Filter handleFilterChange={handleFilterChange} />
       <ContactList
         handleDeleteContact={handleDeleteContact}
-        contacts={filterContactArray.length > 0 ? filterContactArray : contacts}
+        contacts={contacts}
       />
     </div>
   );
