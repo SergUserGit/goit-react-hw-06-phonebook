@@ -5,6 +5,7 @@ export const contactsSlice = createSlice({
   initialState: {
     contacts: [],
     filter: '',
+    contactsFilter: [],
   },
   reducers: {
     addContacts(state, action) {
@@ -26,46 +27,31 @@ export const contactsSlice = createSlice({
         }
       }
     },
+    updateFilter(state, action) {
+      state.filter = action.payload;
+    },
+    resetFilterContacts(state, action) {
+      state.contactsFilter = [];
+    },
+    filterContacts(state, action) {
+      const filterArray = action.payload.filter(contact =>
+        contact.name.toUpperCase().includes(state.filter)
+      );
+      if (filterArray.length > 0) {
+        for (const i of filterArray) {
+          state.contactsFilter.push(i);
+        }
+      }
+    },
   },
 });
 
-//const filterSlice = createSlice({
-//  name: 'filter',
-//  initialState: '',
-//  reducers: {
-//    updateFilter(state, action) {
-//      return action.payload;
-//    },
-//  },
-//});
-
-//const contactsFilterSlice = createSlice({
-// name: 'contactsFilter',
-// initialState: [],
-//reducers: {
-//   filterContacts(state, action) {
-//     const filterArray = action.payload.contacts.filter(contact =>
-//      contact.name.toUpperCase().includes(action.payload.filterContact)
-//    );
-//    if (filterArray.length > 0) {
-//      for (const i of filterArray) {
-//        state.push(i);
-//      }
-//    }
-//  },
-
-//  resetFilterContacts(state, action) {
-//     return [];
-//   },
-//  },
-//});
-
-export const { addContacts, deleteContacts } = contactsSlice.actions;
+export const {
+  addContacts,
+  deleteContacts,
+  updateFilter,
+  resetFilterContacts,
+  filterContacts,
+} = contactsSlice.actions;
 export const contactsReducer = contactsSlice.reducer;
 
-//export const { updateFilter } = filterSlice.actions;
-//export const filterReducer = filterSlice.reducer;
-
-//export const { filterContacts, resetFilterContacts } =
-// contactsFilterSlice.actions;
-//export const filterContactsReducer = contactsFilterSlice.reducer;
